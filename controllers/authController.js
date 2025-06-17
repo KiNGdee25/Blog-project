@@ -10,7 +10,7 @@ exports.registerUser = async (req, res) => {
       return res.status(400).json({ error: 'Email already exists' });
     }
     const user = await User.create({ first_name, last_name, email, username, password });
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET); { expiresIn: '1h' }
     res.status(201).json({ token, user });
   } catch (err) {
     console.error('[REGISTER ERROR]', err);
@@ -25,7 +25,7 @@ exports.loginUser = async (req, res) => {
     if (!user || !(await user.comparePassword(password))) {
       return res.status(401).json({ error: 'Invalid email or password' });
     }
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);{ expiresIn: '1h' }
     res.status(200).json({ token, user });
   } catch (err) {
     res.status(500).json({ error: 'Server error' });
